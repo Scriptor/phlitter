@@ -1,0 +1,16 @@
+(def base-api "http://api.twitter.com/1/")
+
+(fn call-api (action params)
+  (json-decode (file-get-contents (. base-api action "?" (http-build-query params))) TRUE))
+
+(fn timeline-for (screen-name c)
+  (call-api "statuses/user_timeline.json"
+            {"screen_name" screen-name
+             "count" c
+             "exclute_replies" true}))
+
+(fn print-tweet (text)
+  (print* "TWEET: " text "\n\n"))
+
+(def timeline (timeline-for "tmkhan" 10))
+(map (comp #print-tweet (get "text")) timeline)
