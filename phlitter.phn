@@ -1,3 +1,4 @@
+(ns phlitter)
 (def rest-api "http://api.twitter.com/1/")
 (def search-api "http://search.twitter.com/")
 
@@ -32,10 +33,11 @@
   (prn s)
   (prn (str-repeat "=" (strlen s))))
 
-(let [screen-name "nasa"
-      timeline (timeline-for screen-name 10)
-      search-results (:(search "#clojure") "results")]
-  (show-header "SEARCH RESULTS FOR #CLOJURE")
-  (print-tweets search-results)
-  (show-header "TWEETS BY NASA")
-  (print-tweets timeline))
+(comment 
+  (let [screen-name "nasa"
+        timeline (timeline-for screen-name 10)
+        search-results (:(search "#clojure") "results")]
+    (show-header "SEARCH RESULTS FOR #CLOJURE")
+    (print-tweets search-results)
+    (show-header "TWEETS BY NASA")
+    (print-tweets timeline)))
