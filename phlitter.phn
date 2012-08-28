@@ -1,16 +1,41 @@
-(def base-api "http://api.twitter.com/1/")
+(def rest-api "http://api.twitter.com/1/")
+(def search-api "http://search.twitter.com/")
 
-(fn call-api (action params)
-  (json-decode (file-get-contents (. base-api action "?" (http-build-query params))) TRUE))
+(fn call-api (type action params)
+  (json-decode (file-get-contents (. type action "?" (http-build-query params))) TRUE))
 
-(fn timeline-for (screen-name c)
-  (call-api "statuses/user_timeline.json"
+(fn call-rest (action params)
+  (call-api rest-api action params))
+
+(fn call-search (action params)
+  (call-api search-api action params))
+
+(fn timeline-for (screen-name [c 3])
+  (call-rest "statuses/user_timeline.json"
             {"screen_name" screen-name
              "count" c
-             "exclute_replies" true}))
+             "exclude_replies" TRUE}))
 
-(fn print-tweet (text)
-  (print* "TWEET: " text "\n\n"))
+(fn search (query [result-type "recent"] [rpp 5])
+  (call-search "search.json"
+               {"q" query
+                "result_type" result-type
+                "rpp" rpp}))
 
-(def timeline (timeline-for "tmkhan" 10))
-(map (comp #print-tweet (get "text")) timeline)
+(fn print-tweet (tweet)
+  (print* "TWEET: " (:tweet "text") "\n\n"))
+
+(fn print-tweets (tweets)
+  (map #print-tweet tweets))
+
+(fn show-header (s)
+  (prn s)
+  (prn (str-repeat "=" (strlen s))))
+
+(let [screen-name "nasa"
+      timeline (timeline-for screen-name 10)
+      search-results (:(search "#clojure") "results")]
+  (show-header "SEARCH RESULTS FOR #CLOJURE")
+  (print-tweets search-results)
+  (show-header "TWEETS BY NASA")
+  (print-tweets timeline))
