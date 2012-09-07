@@ -33,11 +33,12 @@
   (prn s)
   (prn (str-repeat "=" (strlen s))))
 
-(comment 
+(if-not (repling)
   (let [screen-name "nasa"
         timeline (timeline-for screen-name 10)
         search-results (:(search "#clojure") "results")]
     (show-header "SEARCH RESULTS FOR #CLOJURE")
     (print-tweets search-results)
     (show-header "TWEETS BY NASA")
-    (print-tweets timeline)))
+    (print-tweets timeline))
+  NULL)
