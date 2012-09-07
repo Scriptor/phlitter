@@ -18,10 +18,10 @@
              "exclude_replies" TRUE}))
 
 (fn search (query [result-type "recent"] [rpp 5])
-  (call-search "search.json"
+  (:(call-search "search.json"
                {"q" query
                 "result_type" result-type
-                "rpp" rpp}))
+                "rpp" rpp}) "results"))
 
 (fn print-tweet (tweet)
   (print* "TWEET: " (:tweet "text") "\n\n"))
